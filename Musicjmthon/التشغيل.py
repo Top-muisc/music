@@ -1,4 +1,5 @@
-import asyncio
+await m.reply_to_message.delete()
+                            awaiimport asyncio
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
@@ -213,8 +214,7 @@ async def play(client, m: Message):
                             )
                             add_to_queue(chat_id, songname, ytlink, url, "Audio", 0)
                             await huehue.delete()
-                            # await m.reply_to_message.delete()
-                            await m.reply_photo(
+                            # t m.reply_photo(
                                 photo=f"{thumbnail}",
                                 caption=f"""
 **▶ بدأ تشغيل الاغنية
