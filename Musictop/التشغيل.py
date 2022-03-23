@@ -1,5 +1,4 @@
-await m.reply_to_message.delete()
-                            awaiimport asyncio
+import asyncio
 
 from pyrogram import Client, filters
 from pyrogram.types import Message
@@ -14,7 +13,7 @@ from pytgcalls.types.input_stream.quality import (
 from youtubesearchpython import VideosSearch
 
 from config import HNDLR, bot, call_py
-from Musictop.helpers.queues import QUEUE, add_to_queue, get_queue
+from Musicjmthon.helpers.queues import QUEUE, add_to_queue, get_queue
 
 from io import BytesIO
 from traceback import format_exc
@@ -25,7 +24,7 @@ from pyrogram.types import Message
 from Python_ARQ import ARQ
 
 from config import HNDLR
-from Musictop.helpers.merrors import capture_err
+from Musicjmthon.helpers.merrors import capture_err
 
 ARQ_API_KEY = "HMPXNS-BDPCCB-UJKRPU-OQADHG-ARQ"
 aiohttpsession = aiohttp.ClientSession()
@@ -214,7 +213,8 @@ async def play(client, m: Message):
                             )
                             add_to_queue(chat_id, songname, ytlink, url, "Audio", 0)
                             await huehue.delete()
-                            # t m.reply_photo(
+                            # await m.reply_to_message.delete()
+                            await m.reply_photo(
                                 photo=f"{thumbnail}",
                                 caption=f"""
 **▶ بدأ تشغيل الاغنية
