@@ -177,4 +177,122 @@ def get_readable_time(seconds: int) -> int:
     while count < 4:
         count += 1
         remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
-        if seconds == 0 and remainder
+        if seconds == 0 and remainder == 0:
+            break
+        time_list.append(int(result))
+        seconds = int(remainder)
+    for x in range(len(time_list)):
+        time_list[x] = str(time_list[x]) + time_suffix_list[x]
+    if len(time_list) == 4:
+        ping_time += time_list.pop() + ", "
+    time_list.reverse()
+    ping_time += ":".join(time_list)
+    return ping_time
+
+
+def time_formatter(milliseconds: int) -> str:
+    seconds, milliseconds = divmod(int(milliseconds), 1000)
+    minutes, seconds = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    days, hours = divmod(hours, 24)
+    tmp = (
+        ((str(days) + " الايام, ") if days else "")
+        + ((str(hours) + " الساعات, ") if hours else "")
+        + ((str(minutes) + " الدقائق, ") if minutes else "")
+        + ((str(seconds) + " الثواني, ") if seconds else "")
+        + ((str(milliseconds) + " ملي ثانية, ") if milliseconds else "")
+    )
+    return tmp[:-2]
+
+
+def get_file_extension_from_url(url):
+    url_path = urlparse(url).path
+    basename = os.path.basename(url_path)
+    return basename.split(".")[-1]
+
+
+async def download_song(url):
+    song_name = f"{randint(6969, 6999)}.mp3"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            if resp.status == 200:
+                f = await aiofiles.open(song_name, mode="wb")
+                await f.write(await resp.read())
+                await f.close()
+    return song_name
+
+
+is_downloading = False
+
+
+def time_to_seconds(time):
+    stringt = str(time)
+    return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(":"))))
+
+
+@Client.on_message(filters.command(["فيد", "تحميل_فيد"], prefixes=f"{HNDLR}"))
+async def vsong(client, message: Message):
+    urlissed = get_text(message)
+
+    pablo = await client.send_message(message.chat.id, f"**🔎 يتم البحث عن ** `{urlissed}`")
+    if not urlissed:
+        await pablo.edit(
+            "• يرجى وضع اسم للبحث عنه اولا"
+        )
+        return
+
+    search = SearchVideos(f"{urlissed}", offset=1, mode="dict", max_results=1)
+    mi = search.result()
+    mio = mi["search_result"]
+    mo = mio[0]["link"]
+    thum = mio[0]["title"]
+    fridayz = mio[0]["id"]
+    mio[0]["channel"]
+    kekme = f"https://img.youtube.com/vi/{fridayz}/hqdefault.jpg"
+    await asyncio.sleep(0.6)
+    url = mo
+    sedlyf = wget.download(kekme)
+    opts = {
+        "format": "best",
+        "addmetadata": True,
+        "key": "FFmpegMetadata",
+        "prefer_ffmpeg": True,
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "postprocessors": [{"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}],
+        "outtmpl": "%(id)s.mp4",
+        "logtostderr": False,
+        "quiet": True,
+    }
+    try:
+        with YoutubeDL(opts) as ytdl:
+            ytdl_data = ytdl.extract_info(url, download=True)
+    except Exception as e:
+        await event.edit(event, f"**فشل التنزيل** \n**خطأ :** `{str(e)}`")
+        return
+    c_time = time.time()
+    file_stark = f"{ytdl_data['id']}.mp4"
+    capy = f"""
+**🏷️ اسم الفيديو :** [{thum}]({mo})
+**🎧 طلب تحميله من:** {message.from_user.mention}
+"""
+    await client.send_video(
+        message.chat.id,
+        video=open(file_stark, "rb"),
+        duration=int(ytdl_data["duration"]),
+        file_name=str(ytdl_data["title"]),
+        thumb=sedlyf,
+        caption=capy,
+        supports_streaming=True,
+        progress=progress,
+        progress_args=(
+            pablo,
+            c_time,
+            f"**📥 يتم التحميل** `{urlissed}`",
+            file_stark,
+        ),
+    )
+    await pablo.delete()
+    for files in (sedlyf, file_stark):
+        if files and os.path.exists(files):
+            os.remove(files)
