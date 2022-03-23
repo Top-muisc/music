@@ -1,7 +1,7 @@
 {
-    "name": "سورس ميوزك جمثون",
-    "description": "سورس ميوزك جمثون 2021",
-    "logo": "https://telegra.ph/file/b0b13433b8595ed385f07.jpg",
+    "name": "سورس ميوزك توب",
+    "description": "سورس ميوزك توب 2022",
+    "logo": "https://telegra.ph/file/22e2ffdf24abb6bc9bd1b.jpg",
     "keywords": [
         "Telegram",
         "MusicPlayer",
@@ -11,7 +11,7 @@
     "repository": "https://github.com/jmthonar/music",
     "env": {
         "SESSION": {
-            "description": "هنا ضع كود البايروكرام",
+            "description": "هنا ضع كود البايرو توب",
             "required": true
         },
         "API_ID": {
@@ -21,7 +21,7 @@
         "HNDLR": {
             "description": "العلامه التي تضعها قبل اسم الامر مثل ( $ • -) تستطيع تغييرها ",
             "required": false,
-            "value": "!"
+            "value": "$"
         },
         "API_HASH": {
             "description": "هنا ضع الايبي هاش",
